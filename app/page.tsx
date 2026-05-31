@@ -11,8 +11,6 @@ import AboutSection from "./components/sections/AboutSection";
 import SkillsSection from "./components/sections/SkillsSection";
 import ProjectsSection from "./components/sections/ProjectsSection";
 import ContactSection from "./components/sections/ContactSection";
-import TiltScreenModal from "./components/TiltScreenModal";
-
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const TAB_ORDER: string[] = ["About", "Projects", "Skills", "Contact"];
@@ -107,44 +105,100 @@ export default function Home() {
     }
   }, [isAnimating]);
 
-  // "Master scroll": scroll past the end of a section to move to the next one
-  // (and past the top to go back), like full-page sections. Only the FIRST
-  // scroll of a fresh gesture (after a >250ms idle) can move — so the gesture +
-  // momentum that carries you to the edge never auto-advances. You reach the
-  // end, pause, then one more scroll reliably moves on.
+  // Section deck: when the inner panel is scrolled to an edge, the next wheel/touch
+  // gesture advances (or retreats) a tab. Listeners live on the scroll panel so
+  // wheel works anywhere over the folder, not only where the paper peeks through.
   useEffect(() => {
-    let lastTime = 0;
-    let cooldownUntil = 0;
-    const EDGE_TOL = 16; // generous "at the edge" tolerance (px) — no pixel-perfect needed
-    const MIN_DELTA = 4; // ignore trackpad jitter
+    const el = scrollContainerRef.current;
+    if (!el) return;
 
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) < MIN_DELTA) return; // jitter: don't disturb gesture timing
+    let cooldownUntil = 0;
+    const EDGE_TOL = 12;
+    const SWIPE_MIN = 48;
+
+    const atTop = () => el.scrollTop <= EDGE_TOL;
+    const atBottom = () => el.scrollHeight - el.clientHeight - el.scrollTop <= EDGE_TOL;
+
+    const trySectionStep = (direction: "next" | "prev") => {
       const now = Date.now();
-      const newGesture = now - lastTime > 250;
-      lastTime = now;
-      if (!newGesture) return; // momentum / same gesture never advances
+      if (now < cooldownUntil) return false;
 
       const { activeTab: current, isAnimating: animating } = stateRef.current;
-      if (animating || now < cooldownUntil) return;
+      if (animating) return false;
 
-      const el = scrollContainerRef.current;
-      if (!el) return;
-      const idx = current ? TAB_ORDER.indexOf(current) : -1; // -1 = closed cover
-      const atTop = el.scrollTop <= EDGE_TOL;
-      const atBottom = el.scrollHeight - el.clientHeight - el.scrollTop <= EDGE_TOL;
+      const idx = current ? TAB_ORDER.indexOf(current) : -1;
 
-      if (e.deltaY > 0 && atBottom && idx < TAB_ORDER.length - 1) {
-        cooldownUntil = now + 800;
+      if (!current) {
+        if (direction === "next") {
+          cooldownUntil = now + 700;
+          animateToTab(TAB_ORDER[0]);
+          return true;
+        }
+        return false;
+      }
+
+      if (direction === "next" && idx < TAB_ORDER.length - 1) {
+        cooldownUntil = now + 700;
         animateToTab(TAB_ORDER[idx + 1]);
-      } else if (e.deltaY < 0 && atTop && idx > 0) {
-        cooldownUntil = now + 800;
+        return true;
+      }
+      if (direction === "prev" && idx > 0) {
+        cooldownUntil = now + 700;
         animateToTab(TAB_ORDER[idx - 1]);
+        return true;
+      }
+      return false;
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) < 2) return;
+
+      const { activeTab: current } = stateRef.current;
+
+      if (!current) {
+        if (e.deltaY > 0) {
+          e.preventDefault();
+          trySectionStep("next");
+        }
+        return;
+      }
+
+      if (e.deltaY > 0 && atBottom()) {
+        e.preventDefault();
+        trySectionStep("next");
+      } else if (e.deltaY < 0 && atTop()) {
+        e.preventDefault();
+        trySectionStep("prev");
       }
     };
 
-    window.addEventListener("wheel", onWheel, { passive: true });
-    return () => window.removeEventListener("wheel", onWheel);
+    let touchStartY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) touchStartY = e.touches[0].clientY;
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (e.changedTouches.length !== 1) return;
+      const deltaY = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(deltaY) < SWIPE_MIN) return;
+
+      const { activeTab: current } = stateRef.current;
+      if (!current) {
+        if (deltaY > 0) trySectionStep("next");
+        return;
+      }
+
+      if (deltaY > 0 && atBottom()) trySectionStep("next");
+      else if (deltaY < 0 && atTop()) trySectionStep("prev");
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
   }, [animateToTab]);
 
   const activeIdx = activeTab ? TAB_ORDER.indexOf(activeTab) : -1;
@@ -152,13 +206,12 @@ export default function Home() {
 
   return (
     // The screen is the positioning context for our centered div.
-    <div className="relative h-screen bg-sky-50 dark:bg-stone-600">
-      <TiltScreenModal />
+    <div className="relative h-[100dvh] min-h-screen bg-sky-50 dark:bg-stone-600">
       <div
         ref={folderContainerRef}
-        className="absolute top-0 bottom-0 left-0 right-0 m-auto w-[80vw] h-[60vw] max-w-[106.67vh] max-h-[80vh] z-100">
+        className="absolute top-0 bottom-0 left-0 right-0 m-auto z-100 w-[94vw] h-[78dvh] max-w-none max-h-none sm:w-[88vw] sm:h-[70vw] sm:max-w-[106.67vh] sm:max-h-[80vh] md:w-[80vw] md:h-[60vw]">
         {/* Tabs over the folder */}
-        <nav className="absolute w-2/3 h-1/6 right-0 z-20 -translate-y-2/3 lg:-translate-y-1/2">
+        <nav className="absolute right-0 z-20 h-1/6 w-full max-sm:-translate-y-[55%] sm:w-2/3 -translate-y-2/3 lg:-translate-y-1/2">
           <ul className="flex w-full h-full gap-x-1">
             <Tab bgColor="bg-emerald-500" text="About" onClick={() => handleTabClick("About")} />
             <Tab bgColor="bg-red-400" text="Projects" onClick={() => handleTabClick("Projects")} />
@@ -173,7 +226,7 @@ export default function Home() {
         {/* Document Inside of the folder */}
         <div
           ref={scrollContainerRef}
-          className={`absolute inset-x-0 bottom-0 top-6 z-20 w-full rounded-b-lg bg-lined-paper p-4 shadow-lg text-black overflow-y-auto ${animationClass}`}>
+          className={`absolute inset-x-0 bottom-0 top-6 z-20 w-full rounded-b-lg bg-lined-paper p-3 pb-16 sm:p-4 sm:pb-4 shadow-lg text-black overflow-y-auto overscroll-y-contain touch-pan-y [-webkit-overflow-scrolling:touch] ${animationClass}`}>
           <AnimatePresence
             mode="wait"
             custom={direction}
@@ -198,13 +251,16 @@ export default function Home() {
           </AnimatePresence>
           <ScrollHint targetRef={scrollContainerRef} activeTab={activeTab} nextLabel={nextLabel} />
         </div>
-        {/* Front of the folder */}
-        <div className="absolute inset-0 z-40 origin-bottom -skew-x-3 w-full rounded-lg bg-orange-200 p-4 shadow-lg">
-          <StickerLabel text="Shivansh's Stuff" containerClassName=" -rotate-9 translate-y-1/2" />
+        {/* Front of the folder — pointer-events-none so wheel/touch reach the paper panel */}
+        <div className="pointer-events-none absolute inset-0 z-40 origin-bottom -skew-x-3 w-full rounded-lg bg-orange-200 p-4 shadow-lg">
+          <StickerLabel
+            text="Shivansh's Stuff"
+            containerClassName="pointer-events-auto -rotate-9 translate-y-1/2 max-sm:translate-y-1/4"
+          />
 
           <ScotchedPhoto
             image={{ src: "/profile.jpg", width: 300, height: 300, alt: "Shivansh Gupta" }}
-            containerClassName=" w-1/2 translate-y-1/3 translate-x-3/4 skew-x-3 rotate-12 z-20"
+            containerClassName="pointer-events-auto w-[58%] max-sm:w-[52%] translate-y-1/3 translate-x-[68%] max-sm:translate-x-[55%] skew-x-3 rotate-12 z-20"
           />
         </div>
 
@@ -216,7 +272,7 @@ export default function Home() {
           </div>
         )}
 
-        <div className="fixed bottom-3 left-0 right-0 z-[120] flex items-center justify-center gap-4 text-stone-700 dark:text-white pointer-events-none">
+        <div className="fixed bottom-3 left-0 right-0 z-[120] flex flex-wrap items-center justify-center gap-2 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-sm sm:gap-4 sm:text-base text-stone-700 dark:text-white pointer-events-none">
           <span className="pointer-events-auto">Shivansh Gupta</span>
           <span className="text-stone-400">·</span>
           <a

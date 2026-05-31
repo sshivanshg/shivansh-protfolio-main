@@ -343,7 +343,7 @@ const ProjectsSection: React.FC = () => {
       </div>
 
       {/* Sticky category filter */}
-      <div className="sticky top-0 z-30 -mx-4 px-3 py-3 bg-[#fffffb]/95 backdrop-blur-sm border-y border-stone-200 shadow-sm flex flex-wrap gap-2 justify-center">
+      <div className="sticky top-0 z-30 -mx-3 sm:-mx-4 px-2 sm:px-3 py-2 sm:py-3 bg-[#fffffb]/95 backdrop-blur-sm border-y border-stone-200 shadow-sm flex flex-wrap gap-1.5 sm:gap-2 justify-center">
         <button
           type="button"
           onClick={() => setActive("all")}
@@ -365,7 +365,7 @@ const ProjectsSection: React.FC = () => {
         ))}
       </div>
 
-      <div className="p-4 m-4 border-2 rounded-2xl border-stone-300">
+      <div className="p-3 m-2 sm:p-4 sm:m-4 border-2 rounded-2xl border-stone-300">
         {visible.map((cat) => (
           <React.Fragment key={cat.key}>
             <CategoryDivider emoji={cat.emoji} title={cat.title} subtitle={cat.subtitle} color={cat.chipColor} />

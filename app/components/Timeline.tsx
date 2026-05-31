@@ -14,7 +14,7 @@ interface TimelineItemProps {
 const TimelineItem: React.FC<TimelineItemProps> = ({ date, children }) => {
   return (
     // Margin bottom for spacing between items, and margin start to push content away from the line
-    <li className="mb-10 ms-6">
+    <li className="mb-8 ms-4 sm:mb-10 sm:ms-6">
       {/* This div creates the dot on the timeline */}
       <span className="absolute flex items-center justify-center w-3 h-3 bg-blue-500 rounded-full -start-1.75"></span>
 
@@ -33,7 +33,7 @@ const Timeline: React.FC<TimelineProps> = ({ children }) => {
   return (
     // 'relative' is crucial for positioning the dots from child items.
     // 'border-s' creates the vertical line on the start (left) side.
-    <ol className="ml-4 relative border-s-2 border-blue-500">{children}</ol>
+    <ol className="relative ml-2 border-s-2 border-blue-500 sm:ml-4">{children}</ol>
   );
 };
 

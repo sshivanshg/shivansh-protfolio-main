@@ -9,17 +9,17 @@ const AboutSection: React.FC = () => {
   return (
     <div>
       <Reveal>
-        <div className="flex justify-evenly items-center rounded-lg p-3 gap-4">
+        <div className="flex flex-col items-center gap-4 rounded-lg p-3 text-center sm:flex-row sm:justify-evenly sm:text-left">
           <div>
             <h2 className="mb-4 text-xl font-permanent">Who am I ?</h2>
-            <p className="text-3xl font-semibold">Shivansh Gupta</p>
-            <p className="text-xl md:text-2xl text-stone-700">Cloud / DevOps · AI &amp; Full-Stack Engineer</p>
-            <p className="text-base md:text-lg text-stone-500">
+            <p className="text-2xl font-semibold sm:text-3xl">Shivansh Gupta</p>
+            <p className="text-lg sm:text-xl md:text-2xl text-stone-700">Cloud / DevOps · AI &amp; Full-Stack Engineer</p>
+            <p className="text-sm sm:text-base md:text-lg text-stone-500">
               Co-Founder @ Brixloop · CS &amp; AI @ Rishihood University
             </p>
           </div>
           <div className="shrink-0">
-            <Avatar size={180} className="shadow-lg" />
+            <Avatar size={140} className="h-[140px] w-[140px] shadow-lg sm:h-[180px] sm:w-[180px]" />
           </div>
         </div>
       </Reveal>
@@ -27,7 +27,7 @@ const AboutSection: React.FC = () => {
       <hr className="h-px m-6 bg-neutral-quaternary" />
 
       <Reveal>
-        <div className="p-4 m-4 border-2 rounded-2xl border-stone-300">
+        <div className="p-3 m-2 sm:p-4 sm:m-4 border-2 rounded-2xl border-stone-300">
           <h2 className="mb-4 text-2xl font-permanent">Presentation</h2>
           <p className="text-justify">
             Hey, I&apos;m Shivansh — a builder who ships end-to-end, happiest in the <b>cloud &amp; DevOps</b> layer.{" "}
@@ -58,7 +58,7 @@ const AboutSection: React.FC = () => {
 
       <hr className="h-px m-10 bg-neutral-quaternary" />
 
-      <div className="p-4 m-4 border-2 rounded-2xl border-stone-300">
+      <div className="p-3 m-2 sm:p-4 sm:m-4 border-2 rounded-2xl border-stone-300">
         <h2 className="mb-4 text-2xl font-permanent">My work experience</h2>
         <Timeline>
           <TimelineItem date="2025 - Present">
@@ -138,7 +138,7 @@ const AboutSection: React.FC = () => {
 
       <hr className="h-px m-10 bg-neutral-quaternary" />
 
-      <div className="p-4 m-4 border-2 rounded-2xl border-stone-300">
+      <div className="p-3 m-2 sm:p-4 sm:m-4 border-2 rounded-2xl border-stone-300">
         <h2 className="mb-4 text-2xl font-permanent">Leadership & Community</h2>
         <Timeline>
           <TimelineItem date="Feb 2024 - Feb 2026">

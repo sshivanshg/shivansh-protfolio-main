@@ -46,7 +46,7 @@ const ContactSection: React.FC = () => {
             <Reveal key={s.label} delay={i * 70}>
               <a
                 href={s.href}
-                className="flex flex-col items-center w-25 bg-white rounded-xl p-6 m-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="flex flex-col items-center min-w-[5.5rem] bg-white rounded-xl p-4 m-2 sm:p-6 sm:m-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 {...(s.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
                 <p>{s.label}</p>
                 {s.icon}

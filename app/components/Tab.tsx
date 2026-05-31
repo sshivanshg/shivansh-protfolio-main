@@ -9,8 +9,9 @@ interface TabProps {
 const Tab: React.FC<TabProps> = ({ bgColor, text, onClick }) => {
   // All the repeated styling classes are stored here in one place.
   const commonTabClasses = `
-    flex justify-center h-full rounded-t-md py-[1.2vw] text-[3vw] md:py-2 md:text-2xl font-medium text-stone-800 shadow-lg
+    flex justify-center h-full min-h-[2.75rem] rounded-t-md py-2 text-sm font-medium text-stone-800 shadow-lg
     transition duration-300 ease-in-out hover:-translate-y-1 active:translate-y-1
+    sm:py-[1.2vw] sm:text-[3vw] md:py-2 md:text-2xl
     [@media(max-height:450px)]:text-base [@media(max-height:450px)]:py-[1vh]
   `;
 

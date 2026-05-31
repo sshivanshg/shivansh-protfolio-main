@@ -14,7 +14,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ title, thumbnail, icon, iconTitle, iconColor, text, children, elements }) => {
   return (
-    <div className="bg-white rounded-xl p-6 m-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <div className="bg-white rounded-xl p-4 m-2 sm:p-6 sm:m-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       {thumbnail && <div className={`flex items-center justify-center mb-4`}>{thumbnail}</div>}
       {icon && (
         <div className="flex items-center">

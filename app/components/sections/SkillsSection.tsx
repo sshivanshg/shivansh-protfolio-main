@@ -73,7 +73,7 @@ const SkillsSection: React.FC = () => {
 
       <hr className="h-px m-6 bg-neutral-quaternary" />
 
-      <div className="skills-shit p-4 m-4 border-2 rounded-2xl border-stone-300">
+      <div className="skills-shit p-3 m-2 sm:p-4 sm:m-4 border-2 rounded-2xl border-stone-300">
         <h2 className="pb-4 text-2xl font-permanent">My Skills</h2>
         <div className="lg:grid lg:grid-cols-2">
           {SKILLS.map((s, i) => (
@@ -86,7 +86,7 @@ const SkillsSection: React.FC = () => {
 
       <hr className="h-px m-10 bg-neutral-quaternary" />
 
-      <div className="Education-shit p-4 m-4 border-2 rounded-2xl border-stone-300">
+      <div className="Education-shit p-3 m-2 sm:p-4 sm:m-4 border-2 rounded-2xl border-stone-300">
         <h2 className="pb-4 text-2xl font-permanent">My Education</h2>
         <Timeline>
           <TimelineItem date="2023 - 2027 (expected)">
