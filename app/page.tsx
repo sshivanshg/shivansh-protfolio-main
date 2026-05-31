@@ -209,9 +209,9 @@ export default function Home() {
     <div className="relative h-[100dvh] min-h-screen bg-sky-50 dark:bg-stone-600">
       <div
         ref={folderContainerRef}
-        className="absolute top-0 bottom-0 left-0 right-0 m-auto z-100 w-[94vw] h-[78dvh] max-w-none max-h-none sm:w-[88vw] sm:h-[70vw] sm:max-w-[106.67vh] sm:max-h-[80vh] md:w-[80vw] md:h-[60vw]">
+        className="absolute top-0 bottom-0 left-0 right-0 m-auto z-100 w-[80vw] h-[60vw] max-w-[106.67vh] max-h-[80vh] max-sm:w-[94vw] max-sm:h-[78dvh] max-sm:max-w-none max-sm:max-h-none">
         {/* Tabs over the folder */}
-        <nav className="absolute right-0 z-20 h-1/6 w-full max-sm:-translate-y-[55%] sm:w-2/3 -translate-y-2/3 lg:-translate-y-1/2">
+        <nav className="absolute right-0 z-20 h-1/6 w-2/3 -translate-y-2/3 lg:-translate-y-1/2 max-sm:w-full max-sm:-translate-y-[55%]">
           <ul className="flex w-full h-full gap-x-1">
             <Tab bgColor="bg-emerald-500" text="About" onClick={() => handleTabClick("About")} />
             <Tab bgColor="bg-red-400" text="Projects" onClick={() => handleTabClick("Projects")} />
@@ -226,7 +226,7 @@ export default function Home() {
         {/* Document Inside of the folder */}
         <div
           ref={scrollContainerRef}
-          className={`absolute inset-x-0 bottom-0 top-6 z-20 w-full rounded-b-lg bg-lined-paper p-3 pb-16 sm:p-4 sm:pb-4 shadow-lg text-black overflow-y-auto overscroll-y-contain touch-pan-y [-webkit-overflow-scrolling:touch] ${animationClass}`}>
+          className={`absolute inset-x-0 bottom-0 top-6 z-20 w-full rounded-b-lg bg-lined-paper p-4 shadow-lg text-black overflow-y-auto overscroll-y-contain touch-pan-y [-webkit-overflow-scrolling:touch] max-sm:p-3 max-sm:pb-16 ${animationClass}`}>
           <AnimatePresence
             mode="wait"
             custom={direction}
@@ -260,7 +260,7 @@ export default function Home() {
 
           <ScotchedPhoto
             image={{ src: "/profile.jpg", width: 300, height: 300, alt: "Shivansh Gupta" }}
-            containerClassName="pointer-events-auto w-[58%] max-sm:w-[52%] translate-y-1/3 translate-x-[68%] max-sm:translate-x-[55%] skew-x-3 rotate-12 z-20"
+            containerClassName="pointer-events-auto w-1/2 translate-y-1/3 translate-x-3/4 skew-x-3 rotate-12 z-20 max-sm:w-[52%] max-sm:translate-x-[55%]"
           />
         </div>
 
@@ -272,7 +272,7 @@ export default function Home() {
           </div>
         )}
 
-        <div className="fixed bottom-3 left-0 right-0 z-[120] flex flex-wrap items-center justify-center gap-2 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-sm sm:gap-4 sm:text-base text-stone-700 dark:text-white pointer-events-none">
+        <div className="fixed bottom-3 left-0 right-0 z-[120] flex items-center justify-center gap-4 text-stone-700 dark:text-white pointer-events-none max-sm:flex-wrap max-sm:gap-2 max-sm:px-3 max-sm:pb-[max(0.75rem,env(safe-area-inset-bottom))] max-sm:text-sm">
           <span className="pointer-events-auto">Shivansh Gupta</span>
           <span className="text-stone-400">·</span>
           <a
