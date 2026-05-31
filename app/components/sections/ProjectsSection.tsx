@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Card from "../Card";
 import CategoryDivider from "../CategoryDivider";
+import Reveal from "../Reveal";
 
 const link = "text-blue-500 underline";
 
@@ -217,14 +218,18 @@ const CATEGORIES: Category[] = [
         emoji: "🎬",
         name: "TinyTales",
         title: "Personalized AI storybooks + videos for kids",
-        tags: ["Next.js", "Express", "Prisma", "AWS S3", "Fal.ai", "ElevenLabs", "FFmpeg", "Socket.IO"],
+        tags: ["Next.js", "Express", "Prisma", "AWS", "Docker", "PM2", "Fal.ai", "ElevenLabs", "FFmpeg", "Socket.IO"],
         body: (
           <p className="text-justify mb-4">
             A live consumer platform (<b>2,000–3,000 MAUs, ~10% paid conversion</b>) that turns a child&apos;s photo and
             a theme into an illustrated storybook and a narrated animated video. A multi-stage agentic pipeline — Fal.ai
             PuLID for face-consistent art, Grok Imagine for animation, ElevenLabs for voiceover, FFmpeg for assembly —
-            runs on Next.js 15 + Express + Prisma/Postgres + AWS S3, with Socket.IO live progress and Razorpay payments.
-            Trimmed AWS spend via S3 caching, batched <code>ListObjectsV2</code>, and batch deletes. <br />
+            runs on Next.js 15 + Express + Prisma/Postgres + AWS S3, with Socket.IO live progress and Razorpay payments.{" "}
+            <br />
+            <br />
+            On the ops side I <b>own the infrastructure</b> — Dockerized services with <b>PM2</b>, AWS deploys via{" "}
+            <b>Amplify</b> (IaC in <code>infra/</code>) and a dedicated <b>GPU box</b> for the video pipeline — and
+            trimmed AWS spend via S3 caching, batched <code>ListObjectsV2</code> and batch deletes. <br />
             <br />
             See it live:&nbsp;
             <a href="https://tinytalesvideos.com" target="_blank" rel="noopener noreferrer" className={link}>
@@ -364,16 +369,17 @@ const ProjectsSection: React.FC = () => {
         {visible.map((cat) => (
           <React.Fragment key={cat.key}>
             <CategoryDivider emoji={cat.emoji} title={cat.title} subtitle={cat.subtitle} color={cat.chipColor} />
-            {cat.projects.map((p) => (
-              <Card
-                key={p.name}
-                icon={<span className="text-2xl">{p.emoji}</span>}
-                iconTitle={p.name}
-                iconColor={p.accent ?? cat.accent}
-                title={p.title}
-                elements={p.tags}>
-                {p.body}
-              </Card>
+            {cat.projects.map((p, i) => (
+              <Reveal key={p.name} delay={i * 80}>
+                <Card
+                  icon={<span className="text-2xl">{p.emoji}</span>}
+                  iconTitle={p.name}
+                  iconColor={p.accent ?? cat.accent}
+                  title={p.title}
+                  elements={p.tags}>
+                  {p.body}
+                </Card>
+              </Reveal>
             ))}
           </React.Fragment>
         ))}
