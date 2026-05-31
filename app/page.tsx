@@ -4,7 +4,7 @@ import Tab from "./components/Tab";
 import ScotchedPhoto from "./components/ScotchedPhoto";
 import StickerLabel from "./components/StickerLabel";
 import ScrollHint from "./components/ScrollHint";
-import { Linkedin, Github } from "lucide-react";
+import { Linkedin, Github, ChevronsDown } from "lucide-react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 
 import AboutSection from "./components/sections/AboutSection";
@@ -114,64 +114,63 @@ export default function Home() {
     let overscroll = 0;
     let lastTime = 0;
     let cooldownUntil = 0;
-    const THRESHOLD = 320;
+    let armedDir = 0; // edge the CURRENT gesture began at: +1 bottom, -1 top, 0 otherwise
+    // Low threshold: once a gesture is armed (began at an edge), a single
+    // deliberate scroll advances — no need to scroll several times.
+    const THRESHOLD = 50;
 
     const onWheel = (e: WheelEvent) => {
       const now = Date.now();
-      if (now - lastTime > 250) overscroll = 0; // a pause means a fresh gesture
+      const newGesture = now - lastTime > 250; // a >250ms pause starts a fresh gesture
       lastTime = now;
 
       const { activeTab: current, isAnimating: animating } = stateRef.current;
       if (animating || now < cooldownUntil) return;
 
-      const idx = current ? TAB_ORDER.indexOf(current) : -1;
+      const el = scrollContainerRef.current;
+      if (!el) return;
+      const idx = current ? TAB_ORDER.indexOf(current) : -1; // -1 = closed cover
+      const atTop = el.scrollTop <= 2;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
 
-      // On the closed cover, a downward scroll opens the first tab.
-      if (!current) {
+      // Arm a jump only when a NEW gesture *begins* already at an edge. If you
+      // merely reach the edge partway through a scroll, nothing happens — you
+      // stop, then scroll once more to move to the next / previous section.
+      if (newGesture) {
+        overscroll = 0;
+        if (atTop && atBottom) armedDir = e.deltaY > 0 ? 1 : -1;
+        else armedDir = atBottom ? 1 : atTop ? -1 : 0;
+      }
+
+      if (armedDir === 1 && atBottom && idx < TAB_ORDER.length - 1) {
         if (e.deltaY > 0) {
           overscroll += e.deltaY;
           if (overscroll > THRESHOLD) {
             overscroll = 0;
+            armedDir = 0;
             cooldownUntil = now + 1500;
-            animateToTab(TAB_ORDER[0]);
+            animateToTab(TAB_ORDER[idx + 1]);
           }
-        } else {
-          overscroll = 0;
-        }
-        return;
-      }
-
-      const el = scrollContainerRef.current;
-      if (!el) return;
-      const atTop = el.scrollTop <= 2;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
-
-      if (e.deltaY > 0 && atBottom) {
-        const next = TAB_ORDER[idx + 1];
-        if (!next) return;
-        overscroll += e.deltaY;
-        if (overscroll > THRESHOLD) {
-          overscroll = 0;
-          cooldownUntil = now + 1100;
-          animateToTab(next);
-        }
-      } else if (e.deltaY < 0 && atTop) {
-        const prev = TAB_ORDER[idx - 1];
-        if (!prev) return;
-        overscroll += e.deltaY;
-        if (overscroll < -THRESHOLD) {
-          overscroll = 0;
-          cooldownUntil = now + 1100;
-          animateToTab(prev);
-        }
-      } else {
-        overscroll = 0;
+        } else overscroll = 0;
+      } else if (armedDir === -1 && atTop && idx > 0) {
+        if (e.deltaY < 0) {
+          overscroll += e.deltaY;
+          if (overscroll < -THRESHOLD) {
+            overscroll = 0;
+            armedDir = 0;
+            cooldownUntil = now + 1500;
+            animateToTab(TAB_ORDER[idx - 1]);
+          }
+        } else overscroll = 0;
       }
     };
 
     window.addEventListener("wheel", onWheel, { passive: true });
     return () => window.removeEventListener("wheel", onWheel);
   }, [animateToTab]);
+
+  const activeIdx = activeTab ? TAB_ORDER.indexOf(activeTab) : -1;
+  const nextLabel = activeTab && activeIdx < TAB_ORDER.length - 1 ? TAB_ORDER[activeIdx + 1] : null;
 
   return (
     // The screen is the positioning context for our centered div.
@@ -219,7 +218,7 @@ export default function Home() {
               </motion.div>
             )}
           </AnimatePresence>
-          <ScrollHint targetRef={scrollContainerRef} watch={activeTab} />
+          <ScrollHint targetRef={scrollContainerRef} activeTab={activeTab} nextLabel={nextLabel} />
         </div>
         {/* Front of the folder */}
         <div className="absolute inset-0 z-40 origin-bottom -skew-x-3 w-full rounded-lg bg-orange-200 p-4 shadow-lg">
@@ -230,6 +229,15 @@ export default function Home() {
             containerClassName=" w-1/2 translate-y-1/3 translate-x-3/4 skew-x-3 rotate-12 z-20"
           />
         </div>
+
+        {/* On the closed cover, nudge visitors to scroll in. */}
+        {!activeTab && (
+          <div className="pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center text-stone-500 dark:text-stone-200">
+            <span className="font-kalam text-base md:text-lg">scroll to explore</span>
+            <ChevronsDown size={22} strokeWidth={2} className="animate-bounce" />
+          </div>
+        )}
+
         <div className="fixed bottom-3 left-0 right-0 z-[120] flex items-center justify-center gap-4 text-stone-700 dark:text-white pointer-events-none">
           <span className="pointer-events-auto">Shivansh Gupta</span>
           <span className="text-stone-400">·</span>
