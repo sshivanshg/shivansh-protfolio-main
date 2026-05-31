@@ -112,17 +112,27 @@ export default function Home() {
     const el = scrollContainerRef.current;
     if (!el) return;
 
-    let cooldownUntil = 0;
-    const EDGE_TOL = 12;
-    const SWIPE_MIN = 48;
+    const EDGE_TOL = 12; // px slack for treating the panel as scrolled to an edge
+    const SWIPE_MIN = 48; // min touch travel (px) to count as a deliberate swipe
+    const STEP_INTENT = 90; // accumulated wheel delta a gesture must exert AT an edge to cross
+    const GESTURE_GAP = 160; // ms of quiet that separates one gesture / momentum train from the next
+    const SETTLE_AFTER_STEP = 600; // ms floor between section changes, regardless of input
+
+    // Wheel intent state. `armed` is the crux of the momentum fix: a gesture is
+    // only allowed to cross a section boundary if it was a fresh gesture that
+    // began at the edge. A train that started by scrolling content gets
+    // disarmed, so when its leftover momentum coasts into the edge it can NOT
+    // auto-advance — the reader has to make a separate, deliberate flick.
+    let intent = 0;
+    let lastWheelTs = 0;
+    let lockedUntil = 0;
+    let armed = true;
 
     const atTop = () => el.scrollTop <= EDGE_TOL;
     const atBottom = () => el.scrollHeight - el.clientHeight - el.scrollTop <= EDGE_TOL;
 
-    const trySectionStep = (direction: "next" | "prev") => {
-      const now = Date.now();
-      if (now < cooldownUntil) return false;
-
+    // Perform the actual section change. Returns true if a step happened.
+    const stepTo = (direction: "next" | "prev") => {
       const { activeTab: current, isAnimating: animating } = stateRef.current;
       if (animating) return false;
 
@@ -130,46 +140,73 @@ export default function Home() {
 
       if (!current) {
         if (direction === "next") {
-          cooldownUntil = now + 700;
           animateToTab(TAB_ORDER[0]);
           return true;
         }
         return false;
       }
-
       if (direction === "next" && idx < TAB_ORDER.length - 1) {
-        cooldownUntil = now + 700;
         animateToTab(TAB_ORDER[idx + 1]);
         return true;
       }
       if (direction === "prev" && idx > 0) {
-        cooldownUntil = now + 700;
         animateToTab(TAB_ORDER[idx - 1]);
         return true;
       }
       return false;
     };
 
+    const commitStep = (direction: "next" | "prev", now: number) => {
+      if (now < lockedUntil) return;
+      if (stepTo(direction)) {
+        lockedUntil = now + SETTLE_AFTER_STEP;
+        armed = false; // this train is spent; momentum can't trigger a second step
+        intent = 0;
+      }
+    };
+
     const onWheel = (e: WheelEvent) => {
+      const now = Date.now();
+
+      // A pause longer than GESTURE_GAP ends the previous momentum train and
+      // begins a new, deliberate gesture — re-arm and start a fresh tally.
+      if (now - lastWheelTs > GESTURE_GAP) {
+        intent = 0;
+        armed = true;
+      }
+      lastWheelTs = now;
+
       if (Math.abs(e.deltaY) < 2) return;
 
       const { activeTab: current } = stateRef.current;
+      const goingDown = e.deltaY > 0;
 
+      // Closed cover: only a deliberate downward push opens the first section.
       if (!current) {
-        if (e.deltaY > 0) {
-          e.preventDefault();
-          trySectionStep("next");
-        }
+        if (!goingDown) return;
+        e.preventDefault();
+        if (!armed) return;
+        intent += e.deltaY;
+        if (intent >= STEP_INTENT) commitStep("next", now);
         return;
       }
 
-      if (e.deltaY > 0 && atBottom()) {
-        e.preventDefault();
-        trySectionStep("next");
-      } else if (e.deltaY < 0 && atTop()) {
-        e.preventDefault();
-        trySectionStep("prev");
+      const atEdge = (goingDown && atBottom()) || (!goingDown && atTop());
+
+      // Still content to reveal in the travel direction: let the panel scroll
+      // natively and forfeit this train's right to cross when it reaches the
+      // edge. Don't preventDefault here, or the inner scroll would be killed.
+      if (!atEdge) {
+        intent = 0;
+        armed = false;
+        return;
       }
+
+      // At the edge: take over for section navigation.
+      e.preventDefault();
+      if (!armed) return;
+      intent += e.deltaY;
+      if (Math.abs(intent) >= STEP_INTENT) commitStep(goingDown ? "next" : "prev", now);
     };
 
     let touchStartY = 0;
@@ -179,16 +216,17 @@ export default function Home() {
     const onTouchEnd = (e: TouchEvent) => {
       if (e.changedTouches.length !== 1) return;
       const deltaY = touchStartY - e.changedTouches[0].clientY;
-      if (Math.abs(deltaY) < SWIPE_MIN) return;
+      if (Math.abs(deltaY) < SWIPE_MIN) return; // each swipe is already a deliberate, discrete gesture
 
+      const now = Date.now();
       const { activeTab: current } = stateRef.current;
       if (!current) {
-        if (deltaY > 0) trySectionStep("next");
+        if (deltaY > 0) commitStep("next", now);
         return;
       }
 
-      if (deltaY > 0 && atBottom()) trySectionStep("next");
-      else if (deltaY < 0 && atTop()) trySectionStep("prev");
+      if (deltaY > 0 && atBottom()) commitStep("next", now);
+      else if (deltaY < 0 && atTop()) commitStep("prev", now);
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
