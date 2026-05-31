@@ -107,22 +107,23 @@ export default function Home() {
     }
   }, [isAnimating]);
 
-  // "Master scroll": at the bottom of a section keep scrolling to advance to the
-  // next tab (and up at the top to go back) — like full-page sections. An
-  // accumulator + cooldown make it feel intentional rather than jumpy.
+  // "Master scroll": scroll past the end of a section to move to the next one
+  // (and past the top to go back), like full-page sections. Only the FIRST
+  // scroll of a fresh gesture (after a >250ms idle) can move — so the gesture +
+  // momentum that carries you to the edge never auto-advances. You reach the
+  // end, pause, then one more scroll reliably moves on.
   useEffect(() => {
-    let overscroll = 0;
     let lastTime = 0;
     let cooldownUntil = 0;
-    let armedDir = 0; // edge the CURRENT gesture began at: +1 bottom, -1 top, 0 otherwise
-    // Low threshold: once a gesture is armed (began at an edge), a single
-    // deliberate scroll advances — no need to scroll several times.
-    const THRESHOLD = 50;
+    const EDGE_TOL = 16; // generous "at the edge" tolerance (px) — no pixel-perfect needed
+    const MIN_DELTA = 4; // ignore trackpad jitter
 
     const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) < MIN_DELTA) return; // jitter: don't disturb gesture timing
       const now = Date.now();
-      const newGesture = now - lastTime > 250; // a >250ms pause starts a fresh gesture
+      const newGesture = now - lastTime > 250;
       lastTime = now;
+      if (!newGesture) return; // momentum / same gesture never advances
 
       const { activeTab: current, isAnimating: animating } = stateRef.current;
       if (animating || now < cooldownUntil) return;
@@ -130,38 +131,15 @@ export default function Home() {
       const el = scrollContainerRef.current;
       if (!el) return;
       const idx = current ? TAB_ORDER.indexOf(current) : -1; // -1 = closed cover
-      const atTop = el.scrollTop <= 2;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+      const atTop = el.scrollTop <= EDGE_TOL;
+      const atBottom = el.scrollHeight - el.clientHeight - el.scrollTop <= EDGE_TOL;
 
-      // Arm a jump only when a NEW gesture *begins* already at an edge. If you
-      // merely reach the edge partway through a scroll, nothing happens — you
-      // stop, then scroll once more to move to the next / previous section.
-      if (newGesture) {
-        overscroll = 0;
-        if (atTop && atBottom) armedDir = e.deltaY > 0 ? 1 : -1;
-        else armedDir = atBottom ? 1 : atTop ? -1 : 0;
-      }
-
-      if (armedDir === 1 && atBottom && idx < TAB_ORDER.length - 1) {
-        if (e.deltaY > 0) {
-          overscroll += e.deltaY;
-          if (overscroll > THRESHOLD) {
-            overscroll = 0;
-            armedDir = 0;
-            cooldownUntil = now + 1500;
-            animateToTab(TAB_ORDER[idx + 1]);
-          }
-        } else overscroll = 0;
-      } else if (armedDir === -1 && atTop && idx > 0) {
-        if (e.deltaY < 0) {
-          overscroll += e.deltaY;
-          if (overscroll < -THRESHOLD) {
-            overscroll = 0;
-            armedDir = 0;
-            cooldownUntil = now + 1500;
-            animateToTab(TAB_ORDER[idx - 1]);
-          }
-        } else overscroll = 0;
+      if (e.deltaY > 0 && atBottom && idx < TAB_ORDER.length - 1) {
+        cooldownUntil = now + 800;
+        animateToTab(TAB_ORDER[idx + 1]);
+      } else if (e.deltaY < 0 && atTop && idx > 0) {
+        cooldownUntil = now + 800;
+        animateToTab(TAB_ORDER[idx - 1]);
       }
     };
 
