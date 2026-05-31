@@ -12,6 +12,7 @@ interface Project {
   title: string;
   tags: string[];
   body: React.ReactNode;
+  accent?: string;
 }
 
 interface Category {
@@ -25,6 +26,53 @@ interface Category {
 }
 
 const CATEGORIES: Category[] = [
+  {
+    key: "devops",
+    emoji: "☁️",
+    title: "Cloud & DevOps",
+    subtitle: "infra, IaC & shipping — my home turf",
+    chipColor: "bg-sky-500",
+    accent: "bg-sky-600",
+    projects: [
+      {
+        emoji: "🛠️",
+        name: "Production Infra",
+        title: "Multi-cloud infra, IaC & zero-downtime deploys",
+        tags: ["AWS", "Azure", "Cloudflare", "Docker", "Terraform", "GitHub Actions", "Nginx", "PM2", "Redis"],
+        body: (
+          <p className="text-justify mb-4">
+            DevOps is where I&apos;m happiest. I architect and operate the production infrastructure behind everything I
+            ship — multi-cloud by necessity: <b>AWS</b> (EC2, S3, RDS, CloudFront, ALB), <b>Azure Container Apps</b>, and{" "}
+            <b>Cloudflare</b> (R2, Workers). Everything is containerized with <b>Docker</b>, provisioned as code with{" "}
+            <b>Terraform</b>, and shipped through <b>GitHub Actions</b> CI/CD behind <b>Nginx</b> reverse proxies with{" "}
+            <b>PM2</b> process management and <b>zero-downtime deploys</b>. <br />
+            <br />
+            I tune for cost and latency, not just uptime: a <b>Redis</b> caching layer cut API latency 20–35% at RenewBuy,
+            and S3 caching + batched calls trimmed AWS spend on TinyTales.
+          </p>
+        ),
+      },
+      {
+        emoji: "🛍️",
+        name: "Devops Ecom",
+        title: "E-commerce on a full IaC + CI/CD pipeline",
+        tags: ["Terraform", "Docker", "Render", "CI/CD", "MongoDB", "Node.js"],
+        body: (
+          <p className="text-justify mb-4">
+            A personalized e-commerce platform shipped on a complete DevOps pipeline — <b>Terraform</b> IaC, Dockerized
+            services, Render deploys, and scripted automation, with a documented split-commit git workflow. The app layer
+            adds AI-style recommendations via a <b>MongoDB aggregation pipeline</b>, a Size×Color variant inventory with
+            individual SKU tracking, and role-based Guest / User / VIP / Admin experiences. <br />
+            <br />
+            View the source:&nbsp;
+            <a href="https://github.com/sshivanshg/Devops_ecom" target="_blank" rel="noopener noreferrer" className={link}>
+              GitHub
+            </a>
+          </p>
+        ),
+      },
+    ],
+  },
   {
     key: "ml",
     emoji: "🧠",
@@ -102,18 +150,38 @@ const CATEGORIES: Category[] = [
     key: "ai",
     emoji: "🤖",
     title: "Applied AI & Agentic Products",
-    subtitle: "products people actually use",
+    subtitle: "the studio & the products people use",
     chipColor: "bg-emerald-500",
     accent: "bg-emerald-600",
     projects: [
       {
+        emoji: "🟠",
+        name: "Brixloop",
+        title: "Digital product studio — Build & Ship Faster",
+        accent: "bg-orange-500",
+        tags: ["Co-founder", "Next.js", "TypeScript", "Tailwind", "Studio"],
+        body: (
+          <p className="text-justify mb-4">
+            The digital product studio I <b>co-founded</b> — <i>&quot;Build and Ship Faster.&quot;</i> Brixloop designs
+            and ships products end-to-end, and it&apos;s home to two of them: <b>Arth Saathi</b>, an AI operating system
+            for India&apos;s small shops, and <b>LexVault</b>, an AI contract-lifecycle platform — both detailed below.{" "}
+            <br />
+            <br />
+            Visit the studio:&nbsp;
+            <a href="https://brixloop.com" target="_blank" rel="noopener noreferrer" className={link}>
+              brixloop.com
+            </a>
+          </p>
+        ),
+      },
+      {
         emoji: "🇮🇳",
         name: "Arth Saathi",
         title: "AI Operating System for India's Shops",
-        tags: ["Next.js", "Fastify", "Prisma", "PostgreSQL", "Expo", "LangGraph", "Claude", "AWS"],
+        tags: ["Brixloop", "Next.js", "Fastify", "Prisma", "Expo", "LangGraph", "Claude", "AWS"],
         body: (
           <p className="text-justify mb-4">
-            <b>My flagship.</b> An AI-first, Hindi/Hinglish operating system for India&apos;s 5–50 employee shops —
+            <b>A Brixloop product.</b> An AI-first, Hindi/Hinglish operating system for India&apos;s 5–50 employee shops —
             attendance, payroll, GST and embedded fintech in an app the owner simply <i>talks to</i>. A pnpm monorepo
             (Next.js 14 web/admin, Expo mobile, Fastify/Nest backend, Prisma/Postgres on AWS RDS) built around a{" "}
             <b>confirm-before-write LangGraph agent</b> that gates every AI mutation behind explicit human approval.
@@ -130,15 +198,18 @@ const CATEGORIES: Category[] = [
         emoji: "⚖️",
         name: "LexVault",
         title: "AI Contract Lifecycle with line-level citations",
-        tags: ["Next.js", "Express", "pgvector", "Claude", "RAG", "Liveblocks", "Cloudflare R2"],
+        tags: ["Brixloop", "Next.js", "Express", "pgvector", "Claude", "RAG", "Liveblocks"],
         body: (
           <p className="text-justify mb-4">
-            Draft, review, sign and collaborate on legal contracts with AI that&apos;s grounded in <b>exact line-level
-            citations</b> — not vibes. Hybrid RAG over Neon Postgres + pgvector, Claude for review / rewrite /
-            clause-generation, real-time co-editing via Liveblocks, DAG approval workflows, and a Cloudflare R2 document
-            vault. Next.js 14 + Express with rotating JWT (RS256) auth. <br />
+            <b>A Brixloop product.</b> Draft, review, sign and collaborate on legal contracts with AI that&apos;s grounded
+            in <b>exact line-level citations</b> — not vibes. Hybrid RAG over Neon Postgres + pgvector, Claude for review
+            / rewrite / clause-generation, real-time co-editing via Liveblocks, DAG approval workflows, and a Cloudflare
+            R2 document vault. Next.js 14 + Express with rotating JWT (RS256) auth. <br />
             <br />
-            <span className="text-stone-500">Private repo — a full walkthrough is available on request.</span>
+            See it live:&nbsp;
+            <a href="https://www.lexvault.in" target="_blank" rel="noopener noreferrer" className={link}>
+              lexvault.in
+            </a>
           </p>
         ),
       },
@@ -186,12 +257,36 @@ const CATEGORIES: Category[] = [
   },
   {
     key: "sys",
-    emoji: "🛠️",
+    emoji: "🧩",
     title: "Systems Core",
     subtitle: "desktop apps & developer tooling",
     chipColor: "bg-amber-400",
     accent: "bg-amber-600",
     projects: [
+      {
+        emoji: "⚙️",
+        name: "DevHelp",
+        title: "Clone any OSS repo → a working dev env",
+        tags: ["Node.js", "TypeScript", "CLI", "MCP", "Docker"],
+        body: (
+          <p className="text-justify mb-4">
+            A CLI that does the 45 minutes of setup you&apos;d otherwise do by hand — detects <b>29 ecosystems</b>, picks
+            the package manager from the lockfile, installs, copies env files, generates Prisma clients — then{" "}
+            <b>proves it actually runs</b> by booting the dev server and polling its URL (<code>--verify</code>).
+            Stress-tested on 20 real OSS repos, lifting clean-setup rate from <b>25% to 75%</b> with zero silent
+            failures. Also runs as an MCP server. <br />
+            <br />
+            Source:&nbsp;
+            <a href="https://github.com/sshivanshg/devhelp" target="_blank" rel="noopener noreferrer" className={link}>
+              GitHub
+            </a>
+            &nbsp;· Install:&nbsp;
+            <a href="https://www.npmjs.com/package/devhelp-cli" target="_blank" rel="noopener noreferrer" className={link}>
+              npm · devhelp-cli
+            </a>
+          </p>
+        ),
+      },
       {
         emoji: "🗂️",
         name: "File Organizer",
@@ -224,30 +319,6 @@ const CATEGORIES: Category[] = [
             Bun + TypeScript, shipped as a single compiled standalone binary. <br />
             <br />
             <span className="text-stone-500">A live run reclaimed 388&nbsp;MB on first scan.</span>
-          </p>
-        ),
-      },
-      {
-        emoji: "⚙️",
-        name: "DevHelp",
-        title: "Clone any OSS repo → a working dev env",
-        tags: ["Node.js", "TypeScript", "CLI", "MCP", "Docker"],
-        body: (
-          <p className="text-justify mb-4">
-            A CLI that does the 45 minutes of setup you&apos;d otherwise do by hand — detects <b>29 ecosystems</b>, picks
-            the package manager from the lockfile, installs, copies env files, generates Prisma clients — then{" "}
-            <b>proves it actually runs</b> by booting the dev server and polling its URL (<code>--verify</code>).
-            Stress-tested on 20 real OSS repos, lifting clean-setup rate from <b>25% to 75%</b> with zero silent
-            failures. Also runs as an MCP server. <br />
-            <br />
-            Source:&nbsp;
-            <a href="https://github.com/sshivanshg/devhelp" target="_blank" rel="noopener noreferrer" className={link}>
-              GitHub
-            </a>
-            &nbsp;· Install:&nbsp;
-            <a href="https://www.npmjs.com/package/devhelp-cli" target="_blank" rel="noopener noreferrer" className={link}>
-              npm · devhelp-cli
-            </a>
           </p>
         ),
       },
@@ -298,7 +369,7 @@ const ProjectsSection: React.FC = () => {
                 key={p.name}
                 icon={<span className="text-2xl">{p.emoji}</span>}
                 iconTitle={p.name}
-                iconColor={cat.accent}
+                iconColor={p.accent ?? cat.accent}
                 title={p.title}
                 elements={p.tags}>
                 {p.body}

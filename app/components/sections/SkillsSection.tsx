@@ -94,7 +94,7 @@ const SkillsSection: React.FC = () => {
               title="B.Tech, Computer Science & Artificial Intelligence"
               icon={<GraduationCap size={24} strokeWidth={1.75} color="#ffffff" />}
               iconTitle="Rishihood University"
-              text="Sonipat, Haryana · SGPA 7.0"
+              text="Sonipat, Haryana"
               elements={["Machine Learning", "Deep Learning", "Systems", "Full-Stack Engineering"]}
               iconColor="bg-indigo-500"
             />

@@ -3,6 +3,7 @@
 import Tab from "./components/Tab";
 import ScotchedPhoto from "./components/ScotchedPhoto";
 import StickerLabel from "./components/StickerLabel";
+import { Linkedin, Github } from "lucide-react";
 
 import AboutSection from "./components/sections/AboutSection";
 import SkillsSection from "./components/sections/SkillsSection";
@@ -29,14 +30,14 @@ export default function Home() {
       setAnimationClass("animate-put-back");
         setTimeout(() => {
           setActiveTab(null);
-        }, 800);
+        }, 450);
     } else {
       if (activeTab) {
         setAnimationClass("animate-put-back");
         setTimeout(() => {
           setActiveTab(tabName);
           setAnimationClass("animate-pull-over");
-        }, 800);
+        }, 450);
       } else {
         setActiveTab(tabName);
         setAnimationClass("animate-pull-over");
@@ -58,7 +59,7 @@ export default function Home() {
           setAnimationClass("animate-put-back");
           setTimeout(() => {
             setActiveTab(null);
-          }, 800);
+          }, 450);
         }
       }
     };
@@ -74,7 +75,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isAnimating) {
-      const timer = setTimeout(() => setIsAnimating(false), 800);
+      const timer = setTimeout(() => setIsAnimating(false), 450);
       return () => clearTimeout(timer);
     }
   }, [isAnimating]);
@@ -117,24 +118,26 @@ export default function Home() {
             containerClassName=" w-1/2 translate-y-1/3 translate-x-3/4 skew-x-3 rotate-12 z-20"
           />
         </div>
-        <p className="absolute -bottom-10 left-0 right-0 text-center text-stone-700 dark:text-white">
-          Shivansh Gupta {new Date().getFullYear()} -&nbsp;
+        <div className="fixed bottom-3 left-0 right-0 z-[120] flex items-center justify-center gap-4 text-stone-700 dark:text-white pointer-events-none">
+          <span className="pointer-events-auto">Shivansh Gupta {new Date().getFullYear()}</span>
+          <span className="text-stone-400">·</span>
           <a
             href="https://www.linkedin.com/in/shivansh-gupta-a0400827b/"
-            className="text-blue-500 "
+            aria-label="LinkedIn"
+            className="pointer-events-auto transition-transform hover:-translate-y-0.5"
             target="_blank"
             rel="noopener noreferrer">
-            LinkedIn
+            <Linkedin size={22} strokeWidth={1.75} color="#0A66C2" />
           </a>
-          &nbsp;-&nbsp;
           <a
             href="https://github.com/sshivanshg"
-            className="text-blue-500 "
+            aria-label="GitHub"
+            className="pointer-events-auto transition-transform hover:-translate-y-0.5 text-stone-800 dark:text-white"
             target="_blank"
             rel="noopener noreferrer">
-            GitHub
+            <Github size={22} strokeWidth={1.75} />
           </a>
-        </p>
+        </div>
       </div>
     </div>
   );

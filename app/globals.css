@@ -12,8 +12,8 @@
   --font-mono: var(--font-geist-mono);
   --font-permanent: var(--font-permanent-marker);
   --font-kalam: var(--font-kalam);
-  --animate-pull-over: pull-over 0.8s ease-in-out forwards;
-  --animate-put-back: put-back 0.8s ease-in-out forwards;
+  --animate-pull-over: pull-over 0.45s ease-in-out forwards;
+  --animate-put-back: put-back 0.45s ease-in-out forwards;
 }
 
 @layer components {

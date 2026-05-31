@@ -11,8 +11,8 @@ const AboutSection: React.FC = () => {
         <div>
           <h2 className="mb-4 text-xl font-permanent">Who am I ?</h2>
           <p className="text-3xl font-semibold">Shivansh Gupta</p>
-          <p className="text-xl md:text-2xl text-stone-700">AI &amp; Full-Stack Engineer · Founder</p>
-          <p className="text-base md:text-lg text-stone-500">Cloud + DevOps · CS &amp; AI @ Rishihood University</p>
+          <p className="text-xl md:text-2xl text-stone-700">Cloud / DevOps · AI &amp; Full-Stack Engineer</p>
+          <p className="text-base md:text-lg text-stone-500">Co-Founder @ Brixloop · CS &amp; AI @ Rishihood University</p>
         </div>
         <div className="shrink-0">
           <Avatar size={180} className="shadow-lg" />
@@ -24,17 +24,18 @@ const AboutSection: React.FC = () => {
       <div className="p-4 m-4 border-2 rounded-2xl border-stone-300">
         <h2 className="mb-4 text-2xl font-permanent">Presentation</h2>
         <p className="text-justify">
-          Hey, I&apos;m Shivansh — a builder who ships end-to-end. <br />
+          Hey, I&apos;m Shivansh — a builder who ships end-to-end, happiest in the <b>cloud &amp; DevOps</b> layer. <br />
           <br />
-          I&apos;m the founder of <b>Arth Saathi</b>, an AI-first operating system for India&apos;s small shops, and I
-          spend my days moving between three things I love: <b>product</b> (vertical SaaS with real users),{" "}
-          <b>applied AI/ML</b> (agentic workflows, RAG, and honest ML research), and the{" "}
-          <b>cloud &amp; DevOps</b> that holds it all up. <br />
+          I co-founded <b>Brixloop</b>, a digital product studio, where we build and <i>run</i> products like{" "}
+          <b>Arth Saathi</b> (an AI OS for India&apos;s small shops) and <b>LexVault</b> (AI contract lifecycle). My
+          first love is <b>infrastructure</b> — I architect and operate multi-cloud, containerized systems and like them
+          boring, reproducible and observable — and from there I build out the <b>full stack</b> and the{" "}
+          <b>applied AI/ML</b> on top (agentic workflows, RAG, and honest ML research). <br />
           <br />
-          My default stack is <b>Next.js + TypeScript + PostgreSQL/Prisma</b> with <b>Claude / LangGraph</b> for
-          orchestration, <b>Python</b> for ML and quant work, and a healthy obsession with <b>AWS, Cloudflare, Docker
-          and Terraform</b> — I like infrastructure that&apos;s boring, reproducible and observable. I&apos;m currently
-          studying <b>Computer Science &amp; Artificial Intelligence</b> at Rishihood University (graduating 2027). <br />
+          My toolkit: <b>AWS, Azure, Cloudflare, Docker, Terraform, GitHub Actions, Nginx</b> for infra;{" "}
+          <b>Next.js + TypeScript + PostgreSQL/Prisma</b> with <b>Claude / LangGraph</b> for products; and{" "}
+          <b>Python</b> for ML and quant work. I&apos;m currently studying <b>Computer Science &amp; Artificial
+          Intelligence</b> at Rishihood University (graduating 2027). <br />
           <br />
           I care about <b>honest engineering</b>: shipping things that actually work, measuring them, and being clear
           about trade-offs instead of hiding them. <br />
@@ -55,29 +56,27 @@ const AboutSection: React.FC = () => {
       <div className="p-4 m-4 border-2 rounded-2xl border-stone-300">
         <h2 className="mb-4 text-2xl font-permanent">My work experience</h2>
         <Timeline>
-          <TimelineItem date="Jan 2025 - Present">
+          <TimelineItem date="2025 - Present">
             <Card
-              title="Founder & Full-Stack / AI Engineer"
+              title="Co-Founder & Engineer"
               icon={<Rocket size={24} strokeWidth={1.75} color="#ffffff" />}
-              iconTitle="Arth Saathi"
-              iconColor="bg-emerald-500">
+              iconTitle="Brixloop"
+              iconColor="bg-orange-500">
               <p>
-                <b>AI-first operating system for India&apos;s 5–50 employee shops</b> — attendance, payroll, GST and
-                embedded fintech, in a Hindi/Hinglish app the owner simply talks to.
+                Digital product studio — we design, build and <b>operate</b> products end-to-end. Home to{" "}
+                <b>Arth Saathi</b> (an AI OS for India&apos;s small shops) and <b>LexVault</b> (AI contract lifecycle).
               </p>
               <ul className="list-disc list-inside pl-5 mt-4 space-y-2">
                 <li>
-                  Built a <b>pnpm monorepo</b>: Next.js 14 web + admin, Expo/React Native mobile, a Fastify/Nest
-                  backend, and Prisma/PostgreSQL on AWS RDS.
+                  <b>Own the cloud &amp; DevOps:</b> multi-cloud (AWS, Azure Container Apps, Cloudflare), Dockerized
+                  services, <b>Terraform</b> IaC, <b>GitHub Actions</b> CI/CD, Nginx + PM2, and zero-downtime deploys.
                 </li>
                 <li>
-                  Designed a <b>confirm-before-write LangGraph agent</b> architecture (Claude tool-calling) where every
-                  AI-driven mutation is gated by explicit human approval.
+                  Built a <b>pnpm monorepo</b> (Next.js web/admin, Expo mobile, Fastify/Nest backend, Prisma/Postgres)
+                  and a <b>confirm-before-write LangGraph agent</b> (Claude tool-calling) gating every AI mutation behind
+                  human approval.
                 </li>
-                <li>
-                  Owns the full product surface — PRD, GTM, and architecture — with a live pilot and an open pre-seed
-                  round.
-                </li>
+                <li>Drive products end-to-end — architecture, PRD and GTM — across live pilots.</li>
               </ul>
             </Card>
           </TimelineItem>
