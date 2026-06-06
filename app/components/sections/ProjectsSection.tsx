@@ -332,7 +332,7 @@ const CATEGORIES: Category[] = [
 ];
 
 const ProjectsSection: React.FC = () => {
-  const [active, setActive] = useState<string>(CATEGORIES[0].key);
+  const [active, setActive] = useState<string>("all");
   const visible = active === "all" ? CATEGORIES : CATEGORIES.filter((c) => c.key === active);
 
   return (

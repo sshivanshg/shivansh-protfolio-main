@@ -322,6 +322,16 @@ export default function Home() {
             <Linkedin size={22} strokeWidth={1.75} color="#0A66C2" />
           </a>
           <a
+            href="https://x.com/sshivanshg"
+            aria-label="X"
+            className="pointer-events-auto transition-transform hover:-translate-y-0.5 text-stone-800 dark:text-white"
+            target="_blank"
+            rel="noopener noreferrer">
+            <svg width={22} height={22} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </a>
+          <a
             href="https://github.com/sshivanshg"
             aria-label="GitHub"
             className="pointer-events-auto transition-transform hover:-translate-y-0.5 text-stone-800 dark:text-white"
