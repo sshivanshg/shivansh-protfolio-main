@@ -34,7 +34,7 @@ const AboutSection: React.FC = () => {
             <br />
             <br />
             I co-founded <b>Brixloop</b>, a digital product studio, where we build and <i>run</i> products like{" "}
-            <b>Arth Saathi</b> (an AI OS for India&apos;s small shops) and <b>LexVault</b> (AI contract lifecycle). My
+            <b>Arth Saathi</b> (an AI OS for India&apos;s small shops). My
             first love is <b>infrastructure</b> — I architect and operate multi-cloud, containerized systems and like
             them boring, reproducible and observable — and from there I build out the <b>full stack</b> and the{" "}
             <b>applied AI/ML</b> on top (agentic workflows, RAG, and honest ML research). <br />
@@ -70,7 +70,7 @@ const AboutSection: React.FC = () => {
                 iconColor="bg-orange-500">
                 <p>
                   Digital product studio — we design, build and <b>operate</b> products end-to-end. Home to{" "}
-                  <b>Arth Saathi</b> (an AI OS for India&apos;s small shops) and <b>LexVault</b> (AI contract lifecycle).
+                  <b>Arth Saathi</b> (an AI OS for India&apos;s small shops).
                 </p>
                 <ul className="list-disc list-inside pl-5 mt-4 space-y-2">
                   <li>

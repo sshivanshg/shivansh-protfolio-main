@@ -1,5 +1,4 @@
 import React from "react";
-import ContactForm from "../ContactForm";
 import Reveal from "../Reveal";
 import { Github, Linkedin, Mail, Code2 } from "lucide-react";
 
@@ -64,13 +63,6 @@ const ContactSection: React.FC = () => {
             </Reveal>
           ))}
         </div>
-      </div>
-      <hr className="h-px m-6 bg-neutral-quaternary" />
-      <div className="w-full md:w-1/2 md:mx-auto">
-        <h3 className="text-xl font-bold text-center">Or directly via this form</h3>
-        <Reveal>
-          <ContactForm />
-        </Reveal>
       </div>
     </div>
   );

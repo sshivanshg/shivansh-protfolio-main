@@ -126,25 +126,6 @@ const CATEGORIES: Category[] = [
           </p>
         ),
       },
-      {
-        emoji: "📉",
-        name: "StP",
-        title: "Single-Stock Return Prediction (XGBoost)",
-        tags: ["Python", "XGBoost", "Walk-forward", "Backtesting"],
-        body: (
-          <p className="text-justify mb-4">
-            A quant-style pipeline that predicts <b>next-day return</b> (not raw price) with XGBoost and{" "}
-            <b>walk-forward validation</b>. It cleanly separates training, daily inference, risk sizing and backtesting
-            so predictions never bake in position sizing — the disciplined backbone that grew into the RAMT research.{" "}
-            <br />
-            <br />
-            View the source:&nbsp;
-            <a href="https://github.com/sshivanshg/StP" target="_blank" rel="noopener noreferrer" className={link}>
-              GitHub
-            </a>
-          </p>
-        ),
-      },
     ],
   },
   {
@@ -164,8 +145,8 @@ const CATEGORIES: Category[] = [
         body: (
           <p className="text-justify mb-4">
             The digital product studio I <b>co-founded</b> — <i>&quot;Build and Ship Faster.&quot;</i> Brixloop designs
-            and ships products end-to-end, and it&apos;s home to two of them: <b>Arth Saathi</b>, an AI operating system
-            for India&apos;s small shops, and <b>LexVault</b>, an AI contract-lifecycle platform — both detailed below.{" "}
+            and ships products end-to-end, and it&apos;s home to <b>Arth Saathi</b>, an AI operating system for
+            India&apos;s small shops — detailed below.{" "}
             <br />
             <br />
             Visit the studio:&nbsp;
@@ -191,25 +172,6 @@ const CATEGORIES: Category[] = [
             See it live:&nbsp;
             <a href="https://arthsaathi.co.in" target="_blank" rel="noopener noreferrer" className={link}>
               arthsaathi.co.in
-            </a>
-          </p>
-        ),
-      },
-      {
-        emoji: "⚖️",
-        name: "LexVault",
-        title: "AI Contract Lifecycle with line-level citations",
-        tags: ["Brixloop", "Next.js", "Express", "pgvector", "Claude", "RAG", "Liveblocks"],
-        body: (
-          <p className="text-justify mb-4">
-            <b>A Brixloop product.</b> Draft, review, sign and collaborate on legal contracts with AI that&apos;s grounded
-            in <b>exact line-level citations</b> — not vibes. Hybrid RAG over Neon Postgres + pgvector, Claude for review
-            / rewrite / clause-generation, real-time co-editing via Liveblocks, DAG approval workflows, and a Cloudflare
-            R2 document vault. Next.js 14 + Express with rotating JWT (RS256) auth. <br />
-            <br />
-            See it live:&nbsp;
-            <a href="https://www.lexvault.in" target="_blank" rel="noopener noreferrer" className={link}>
-              lexvault.in
             </a>
           </p>
         ),
@@ -269,30 +231,6 @@ const CATEGORIES: Category[] = [
     accent: "bg-amber-600",
     projects: [
       {
-        emoji: "⚙️",
-        name: "DevHelp",
-        title: "Clone any OSS repo → a working dev env",
-        tags: ["Node.js", "TypeScript", "CLI", "MCP", "Docker"],
-        body: (
-          <p className="text-justify mb-4">
-            A CLI that does the 45 minutes of setup you&apos;d otherwise do by hand — detects <b>29 ecosystems</b>, picks
-            the package manager from the lockfile, installs, copies env files, generates Prisma clients — then{" "}
-            <b>proves it actually runs</b> by booting the dev server and polling its URL (<code>--verify</code>).
-            Stress-tested on 20 real OSS repos, lifting clean-setup rate from <b>25% to 75%</b> with zero silent
-            failures. Also runs as an MCP server. <br />
-            <br />
-            Source:&nbsp;
-            <a href="https://github.com/sshivanshg/devhelp" target="_blank" rel="noopener noreferrer" className={link}>
-              GitHub
-            </a>
-            &nbsp;· Install:&nbsp;
-            <a href="https://www.npmjs.com/package/devhelp-cli" target="_blank" rel="noopener noreferrer" className={link}>
-              npm · devhelp-cli
-            </a>
-          </p>
-        ),
-      },
-      {
         emoji: "🗂️",
         name: "File Organizer",
         title: "Desktop file explorer that auto-organizes your mess",
@@ -307,23 +245,6 @@ const CATEGORIES: Category[] = [
             <a href="https://github.com/sshivanshg/File-Organizer" target="_blank" rel="noopener noreferrer" className={link}>
               GitHub
             </a>
-          </p>
-        ),
-      },
-      {
-        emoji: "🐹",
-        name: "burrow",
-        title: "CLI that reclaims disk from dev junk",
-        tags: ["Bun", "TypeScript", "CLI"],
-        body: (
-          <p className="text-justify mb-4">
-            A Mole-inspired CLI that scans for dev junk (<code>node_modules</code>, <code>.next</code>, caches, build
-            artifacts), shows the total reclaimable space up front, and deletes only what you multi-select —{" "}
-            <b>safe by default</b>. Hard guardrails refuse to touch the scan root, <code>$HOME</code>, <code>/</code>, or
-            anything outside the target; <code>--list</code> and <code>--dry-run</code> let you look without touching.
-            Bun + TypeScript, shipped as a single compiled standalone binary. <br />
-            <br />
-            <span className="text-stone-500">A live run reclaimed 388&nbsp;MB on first scan.</span>
           </p>
         ),
       },
